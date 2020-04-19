@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="http://shu000.github.io/xml/base.min.xml" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on miyagon&#39;s blog</title>
+    <link>http://shu000.github.io/tags/</link>
+    <description>Recent content in Tags on miyagon&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <atom:link href="http://shu000.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker＋Node.js＋VSCode環境をWindowsで構築する</title>
+      <link>http://shu000.github.io/post/20191110/</link>
+      <pubDate>Thu, 07 Nov 2019 13:38:57 +0900</pubDate>
+      <guid>http://shu000.github.io/post/20191110/</guid>
+      <description>&lt;p&gt;手順メモ。&lt;/p&gt;
+&lt;h1 id=&#34;versions&#34;&gt;Versions&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Docker Desktop：2.1.0.4&lt;/li&gt;
+&lt;li&gt;VSCode：1.29.2&lt;/li&gt;
+&lt;li&gt;Node.js：10.17.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;docker-desktop-for-windows-をインストール&#34;&gt;Docker Desktop for Windows をインストール&lt;/h1&gt;
+&lt;p&gt;今回はNode.jsをDockerコンテナ上で利用することとします。
+Node.jsをインストールする他の方法として&lt;a href=&#34;https://github.com/coreybutler/nvm-windows&#34;&gt;nvm-windows&lt;/a&gt;という選択肢もありますが、本記事では割愛します。
+なお、ローカルへのNode.js直接インストールは、バージョン変更が面倒になるのでおすすめしません。&lt;/p&gt;
+&lt;h2 id=&#34;前準備hyper-vの有効化&#34;&gt;前準備（Hyper-Vの有効化）&lt;/h2&gt;
+&lt;p&gt;DockerはLinuxのファイルシステムを利用した仮想化システムです。WindowsではHyper-Vを利用して仮想化を実現しています。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;コントロールパネル &amp;gt; プログラムと機能 &amp;gt; Windows機能の有効化または無効化　を開く&lt;/li&gt;
+&lt;li&gt;Hyper-Vにチェックを入れる&lt;/li&gt;
+&lt;li&gt;ねんのためWindowsを再起動する&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_HyperV.png&#34; alt=&#34;Hyper-V設定画面&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;dockerインストール手順&#34;&gt;Dockerインストール手順&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/docker-for-windows/install/&#34;&gt;このページ&lt;/a&gt;から、インストーラをダウンロードする&lt;/li&gt;
+&lt;li&gt;その際、DockerHubへのサインインを求められるのでアカウントを作成しておく&lt;/li&gt;
+&lt;li&gt;インストーラを起動して、何回かYesをクリックしたら完了&lt;/li&gt;
+&lt;li&gt;スタートメニューからDocker Desktopを起動&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_Bar.png&#34; alt=&#34;ツールバーにクジラ表示&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ここにクジラが表示されたら起動完了です。&lt;/p&gt;
+&lt;h2 id=&#34;ドライブ共有設定&#34;&gt;ドライブ共有設定&lt;/h2&gt;
+&lt;p&gt;WindowsのドライブをDockerコンテナと共有できるようにしておきます。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;クジラを右クリックしてSettingsを選択&lt;/li&gt;
+&lt;li&gt;Shared Drives から共有したいドライブをチェックしてApplyする&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_SharedDrives.png&#34; alt=&#34;ドライブ共有設定画面&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;vscode-をインストール&#34;&gt;VSCode をインストール&lt;/h1&gt;
+&lt;p&gt;入力補完やESLint自動適用などのプラグインが便利なエディタです。&lt;/p&gt;
+&lt;h2 id=&#34;vscodeインストール手順&#34;&gt;VSCodeインストール手順&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://code.visualstudio.com/&#34;&gt;このページ&lt;/a&gt;からインストーラをダウンロードする&lt;/li&gt;
+&lt;li&gt;インストーラを実行する&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;vscode日本語化手順&#34;&gt;VSCode日本語化手順&lt;/h2&gt;
+&lt;p&gt;日本語化もしておくと見やすいです。Extensionsを開いて「japanese」などで検索すると日本語拡張が見つかります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_VSCodeJapan.png&#34; alt=&#34;VSCode日本語拡張&#34;&gt;&lt;/p&gt;
+&lt;p&gt;私の場合「使用法」欄のconfig設定はしなくても日本語化されました。&lt;/p&gt;
+&lt;p&gt;日本語表示はこんな感じ。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_VSCodeJapanesed.png&#34; alt=&#34;日本語化後の画面&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;vscodeでdocker上のnodejsプロジェクトを開く&#34;&gt;VSCodeでDocker上のNode.jsプロジェクトを開く&lt;/h1&gt;
+&lt;h2 id=&#34;dockerでnodejsコンテナを起動する&#34;&gt;DockerでNode.jsコンテナを起動する&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;コマンドプロンプトかPowerShellで起動コマンドを叩く&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;docker container run -it -d --name sample -p 3000:3000 -v C:&lt;span style=&#34;color:#ae81ff&#34;&gt;\U&lt;/span&gt;sers&lt;span style=&#34;color:#ae81ff&#34;&gt;\u&lt;/span&gt;sername&lt;span style=&#34;color:#ae81ff&#34;&gt;\D&lt;/span&gt;evelopment&lt;span style=&#34;color:#ae81ff&#34;&gt;\m&lt;/span&gt;yproj:/root/myproj -w /root/myproj node:10.17.0 /bin/bash
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;各コマンド・オプションの意味は以下&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;docker container run&lt;/code&gt;：コンテナ起動コマンド&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-it&lt;/code&gt;：ホスト（Windows）のターミナル操作をコンテナの標準入出力に紐づける&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-d&lt;/code&gt;：デタッチモードで起動する（バックグラウンドで起動する）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--name myproj&lt;/code&gt;：myprojという名前を付ける&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p 8000:8000&lt;/code&gt;：ホスト3000ポートをコンテナ3000ポートに紐づける&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-v C:\...\myproj:/root/myproj&lt;/code&gt;：ホストの「C:...\myproj」を、コンテナの「/root/myproj」で参照可能にする&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-w /root/myproj&lt;/code&gt;：作業ディレクトリ（コンテナ起動時の）を「/root/myproj」にする&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;node:10.17.0&lt;/code&gt;：起動するイメージを「node:10.17.0」に指定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;起動中コンテナの確認コマンドは以下です。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;docker container ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_Docker.png&#34; alt=&#34;Dockerコンテナ起動確認&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;vscodeで起動したコンテナを開く&#34;&gt;VSCodeで起動したコンテナを開く&lt;/h2&gt;
+&lt;p&gt;まず日本語拡張と同様の手順で「Remote Development」拡張をインストールします。リモートエクスプローラーペインが追加され、さっき起動したmyprojコンテナが見えるようになります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_VSCodeContainer.png&#34; alt=&#34;コンテナ一覧&#34;&gt;&lt;/p&gt;
+&lt;p&gt;次にコンテナにアタッチします。Connect to Container ボタンをクリックするとアタッチできます。
+アタッチ直後にはVSCodeの設定ファイルが開かれれると思います。保存しておけばよいです。
+ただ同一イメージからコンテナを立ち上げると設定が引き継がれるので注意してください。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_VSCodeConnect.png&#34; alt=&#34;コンテナアタッチ操作&#34;&gt;&lt;/p&gt;
+&lt;p&gt;アタッチ完了したらエクスプローラーでコンテナ上のディレクトリが見れるようになります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_VSCodeOpened.png&#34; alt=&#34;コンテナアタッチ完了&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ディレクトリが開いていなかったら「フォルダーを開く」から開けます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_VSCodeOpening.png&#34; alt=&#34;コンテナ内のディレクトリを開く操作&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;nodejs-動作確認&#34;&gt;Node.js 動作確認&lt;/h2&gt;
+&lt;p&gt;動作確認のため、HelloWorldしてみます。hello.jsを作成します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_VSCodeHello.png&#34; alt=&#34;hello.js&#34;&gt;&lt;/p&gt;
+&lt;p&gt;次に「ターミナル &amp;gt; 新しいターミナル」からターミナルを開きましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_VSCodeTerminal.png&#34; alt=&#34;ターミナルを開く&#34;&gt;&lt;/p&gt;
+&lt;p&gt;ちゃんとコンテナのターミナルを開いてくれます！VSCodeべんり！
+&lt;code&gt;node hello.js&lt;/code&gt;でメッセージが表示されました！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://shu000.github.io/images/20191107_VSCodeTest.png&#34; alt=&#34;動作確認&#34;&gt;&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>EC2にdocker-composeインストール</title>
+      <link>http://shu000.github.io/post/20191029/</link>
+      <pubDate>Tue, 29 Oct 2019 15:57:47 +0900</pubDate>
+      <guid>http://shu000.github.io/post/20191029/</guid>
+      <description>&lt;h1 id=&#34;コマンドインストール&#34;&gt;コマンドインストール&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo yum update -y
+sudo yum install vim git -y
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ユーザを追加&#34;&gt;ユーザを追加&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo useradd miyagon
+sudo passwd miyagon
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;新規ユーザでsshできるようにする&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo cp -arp /home/ec2-user/.ssh /home/miyagon/
+sudo chown -R miyagon /home/miyagon/.ssh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;新規ユーザにsudo権限を与える&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/etc/sudoers&lt;/code&gt;で wheel グループに権限あればこっち&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo usermod -aG wheel miyagon
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/etc/sudoers.d/clout-init&lt;/code&gt;で個別付与ならこっち&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo visudo -f /etc/sudoers.d/cloud-init
+  +miyagon ALL &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;ALL&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; ALL
+  -ec2-user ALL &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; NOPASSWD: ALL
+  -ec2-user ALL&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt;ALL&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; NOPASSWD:ALL
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ec2-usrを削除&#34;&gt;ec2-usrを削除&lt;/h1&gt;
+&lt;p&gt;新規ユーザでssh可能なことを確認&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;ssh -i IDENTITY_FILE miyagon@IP_ADDRESS
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;ログイン成功したらec2-userはいらない&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo userdel -r ec2-user
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;docker-インストール&#34;&gt;Docker インストール&lt;/h1&gt;
+&lt;p&gt;インストールして起動&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo yum install docker
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo docker --version
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;ユーザをdockerグループに追加
+（sudoなしでdockerコマンド叩けるようにする）&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo usermod -aG docker miyagon
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;docker-compose-インストール&#34;&gt;docker-compose インストール&lt;/h1&gt;
+&lt;p&gt;バージョン番号は最新リリースをここで確認する
+&lt;a href=&#34;https://github.com/docker/compose/releases&#34;&gt;Releases - docker/compose&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo curl -L https://github.com/docker/compose/releases/download/1.25.0-rc4/docker-compose-&lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt;uname -s&lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt;-&lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt;uname -m&lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt; -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    <item>
+      <title>mongoDB@4.0.12でバックアップとリストア</title>
+      <link>http://shu000.github.io/post/20191028/</link>
+      <pubDate>Mon, 28 Oct 2019 16:01:41 +0900</pubDate>
+      <guid>http://shu000.github.io/post/20191028/</guid>
+      <description>&lt;h1 id=&#34;バックアップ&#34;&gt;バックアップ&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mongodump --host hostname --port &lt;span style=&#34;color:#ae81ff&#34;&gt;27017&lt;/span&gt; --username user --password pass -o /dump
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;リストア&#34;&gt;リストア&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mongorestore --host hostname --port &lt;span style=&#34;color:#ae81ff&#34;&gt;27017&lt;/span&gt; --username user --password pass /dump
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    <item>
+      <title>MacのTerminalがzshになったのでPreztoでプロンプトテーマ設定した</title>
+      <link>http://shu000.github.io/post/20191022/</link>
+      <pubDate>Tue, 22 Oct 2019 16:02:52 +0900</pubDate>
+      <guid>http://shu000.github.io/post/20191022/</guid>
+      <description>&lt;h1 id=&#34;zsh到来&#34;&gt;zsh到来&lt;/h1&gt;
+&lt;p&gt;macOSをCatalinaにアップデートしたら
+Terminalくんが「zshにしてよ！」と言ってきた&lt;/p&gt;
+&lt;p&gt;zshにしてあげたら設定がデフォルトに戻ってしまった。&lt;/p&gt;
+&lt;p&gt;すごください
+&lt;img src=&#34;http://shu000.github.io/images/20191022_%E3%81%9F%E3%82%99%E3%81%95%E3%81%84.png&#34; alt=&#34;デフォルトのTerminal&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;preztoを入れた&#34;&gt;Preztoを入れた&lt;/h1&gt;
+&lt;p&gt;zshでプロンプト設定をインポートしてくれるツール&lt;a href=&#34;https://github.com/sorin-ionescu/prezto&#34;&gt;Prezto&lt;/a&gt;を、今まで使ったことなかったので入れてみる&lt;/p&gt;
+&lt;h2 id=&#34;失敗した&#34;&gt;失敗した&lt;/h2&gt;
+&lt;p&gt;README.mdに従ってインストール&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git clone --recursive https://github.com/sorin-ionescu/prezto.git &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;ZDOTDIR&lt;span style=&#34;color:#66d9ef&#34;&gt;:-&lt;/span&gt;$HOME&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/.zprezto&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;怒られた&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;xcrun: error: invalid active developer path &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;/Library/Developer/CommandLineTools&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;, missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;XCodeをインストールしないといかんらしい&lt;/p&gt;
+&lt;p&gt;参考：https://qiita.com/takahashi_kazuki/items/1d85fd4f6df86092d5bc&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;xcode-select --install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;これでおk&lt;/p&gt;
+&lt;h2 id=&#34;成功した&#34;&gt;成功した&lt;/h2&gt;
+&lt;p&gt;XCodeインストール後に叩き直したらうまくいった&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git clone --recursive https://github.com/sorin-ionescu/prezto.git &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;ZDOTDIR&lt;span style=&#34;color:#66d9ef&#34;&gt;:-&lt;/span&gt;$HOME&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/.zprezto&amp;#34;&lt;/span&gt;
+setopt EXTENDED_GLOB
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; rcfile in &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;ZDOTDIR&lt;span style=&#34;color:#66d9ef&#34;&gt;:-&lt;/span&gt;$HOME&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;/.zprezto/runcoms/^README.md&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;.N&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+  ln -s &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$rcfile&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;ZDOTDIR&lt;span style=&#34;color:#66d9ef&#34;&gt;:-&lt;/span&gt;$HOME&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/.&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;rcfile:t&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;preztoでテーマ決め&#34;&gt;Preztoでテーマ決め！&lt;/h1&gt;
+&lt;p&gt;選べるテーマのプレビュー閲覧機能もある&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;prompt -p
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;pure というテーマを入れてみた&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;prompt -s pure
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;以下のメッセージがでたので、指示通りコマンドを追記してあげる&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Set and save not yet implemented.  Please ensure your ~/.zshrc
+contains something similar to the following:
+
+  autoload -Uz promptinit
+  promptinit
+  prompt pure
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;かっこいい
+&lt;img src=&#34;http://shu000.github.io/images/20191022_%E3%81%8B%E3%81%A3%E3%81%93%E3%81%84%E3%81%84.png&#34; alt=&#34;pureテーマを適用したTerminal&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;参考&#34;&gt;参考&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://qiita.com/notakaos/items/89057f2119655ab9f920&#34;&gt;https://qiita.com/notakaos/items/89057f2119655ab9f920&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  
+    <meta name="description" content="zsh到来 macOSをCatalinaにアップデートしたら Terminalくんが「zshにしてよ！」と言ってきた
+zshにしてあげたら設定がデフォルトに戻ってしまった。
+すごください Preztoを入れた zshでプロンプト設定をインポートしてくれるツールPreztoを、今まで使ったことなかったので入れてみる
+失敗した README.mdに従ってインストール
+git clone --recursive https://github.com/sorin-ionescu/prezto.git &#34;${ZDOTDIR:-$HOME}/.zprezto&#34; 怒られた
+xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun XCodeをインストールしないといかんらしい
+参考：https://qiita.com/takahashi_kazuki/items/1d85fd4f6df86092d5bc
+xcode-select --install これでおk
+成功した XCodeインストール後に叩き直したらうまくいった
+git clone --recursive https://github.com/sorin-ionescu/prezto.git &#34;${ZDOTDIR:-$HOME}/.zprezto&#34; setopt EXTENDED_GLOB for rcfile in &#34;${ZDOTDIR:-$HOME}&#34;/.zprezto/runcoms/^README.md(.N); do ln -s &#34;$rcfile&#34; &#34;${ZDOTDIR:-$HOME}/.${rcfile:t}&#34; done Preztoでテーマ決め！ 選べるテーマのプレビュー閲覧機能もある
+prompt -p pure というテーマを入れてみた
+prompt -s pure 以下のメッセージがでたので、指示通りコマンドを追記してあげる
+Set and save not yet implemented. Please ensure your ~/.zshrc contains something similar to the following: autoload -Uz promptinit promptinit prompt pure かっこいい 参考  https://qiita.">
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0" />
+  <title>MacのTerminalがzshになったのでPreztoでプロンプトテーマ設定した | miyagon&#39;s blog</title>
+  <link rel="canonical" href="/post/20191022/">
+
+
+  
+
+
+
+
+
+
+
+
+  
+    
+  
+  
+  <link rel="stylesheet" href="/css/base.min.a65b7a198daa2411550a438c82c7d65937be5a4545ed781eecf4b3e44d419fa0.css" integrity="sha256-plt6GY2qJBFVCkOMgsfWWTe&#43;WkVF7Xge7PSz5E1Bn6A=" crossorigin="anonymous">
+
+
+
+</head>
+
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="/">miyagon&#39;s blog</a>
+      </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/about/">About</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/post/">Posts</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/tags/">Tags</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/categories/">Categories</a>
+        </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+  <article>
+    <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="/post/20191022/" rel="bookmark">MacのTerminalがzshになったのでPreztoでプロンプトテーマ設定した</a>
+  </h2>
+  
+    <time datetime="2019-10-22T16:02:52&#43;09:00">22 October, 2019</time>
+  
+</header>
+    <h1 id="zsh到来">zsh到来</h1>
+<p>macOSをCatalinaにアップデートしたら
+Terminalくんが「zshにしてよ！」と言ってきた</p>
+<p>zshにしてあげたら設定がデフォルトに戻ってしまった。</p>
+<p>すごください
+<img src="/images/20191022_%E3%81%9F%E3%82%99%E3%81%95%E3%81%84.png" alt="デフォルトのTerminal"></p>
+<h1 id="preztoを入れた">Preztoを入れた</h1>
+<p>zshでプロンプト設定をインポートしてくれるツール<a href="https://github.com/sorin-ionescu/prezto">Prezto</a>を、今まで使ったことなかったので入れてみる</p>
+<h2 id="失敗した">失敗した</h2>
+<p>README.mdに従ってインストール</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git clone --recursive https://github.com/sorin-ionescu/prezto.git <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>ZDOTDIR<span style="color:#66d9ef">:-</span>$HOME<span style="color:#e6db74">}</span><span style="color:#e6db74">/.zprezto&#34;</span>
+</code></pre></div><p>怒られた</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">xcrun: error: invalid active developer path <span style="color:#f92672">(</span>/Library/Developer/CommandLineTools<span style="color:#f92672">)</span>, missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun
+</code></pre></div><p>XCodeをインストールしないといかんらしい</p>
+<p>参考：https://qiita.com/takahashi_kazuki/items/1d85fd4f6df86092d5bc</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">xcode-select --install
+</code></pre></div><p>これでおk</p>
+<h2 id="成功した">成功した</h2>
+<p>XCodeインストール後に叩き直したらうまくいった</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git clone --recursive https://github.com/sorin-ionescu/prezto.git <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>ZDOTDIR<span style="color:#66d9ef">:-</span>$HOME<span style="color:#e6db74">}</span><span style="color:#e6db74">/.zprezto&#34;</span>
+setopt EXTENDED_GLOB
+<span style="color:#66d9ef">for</span> rcfile in <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>ZDOTDIR<span style="color:#66d9ef">:-</span>$HOME<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>/.zprezto/runcoms/^README.md<span style="color:#f92672">(</span>.N<span style="color:#f92672">)</span>; <span style="color:#66d9ef">do</span>
+  ln -s <span style="color:#e6db74">&#34;</span>$rcfile<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>ZDOTDIR<span style="color:#66d9ef">:-</span>$HOME<span style="color:#e6db74">}</span><span style="color:#e6db74">/.</span><span style="color:#e6db74">${</span>rcfile:t<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+<span style="color:#66d9ef">done</span>
+</code></pre></div><h1 id="preztoでテーマ決め">Preztoでテーマ決め！</h1>
+<p>選べるテーマのプレビュー閲覧機能もある</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">prompt -p
+</code></pre></div><p>pure というテーマを入れてみた</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">prompt -s pure
+</code></pre></div><p>以下のメッセージがでたので、指示通りコマンドを追記してあげる</p>
+<pre><code>Set and save not yet implemented.  Please ensure your ~/.zshrc
+contains something similar to the following:
+
+  autoload -Uz promptinit
+  promptinit
+  prompt pure
+</code></pre><p>かっこいい
+<img src="/images/20191022_%E3%81%8B%E3%81%A3%E3%81%93%E3%81%84%E3%81%84.png" alt="pureテーマを適用したTerminal"></p>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://qiita.com/notakaos/items/89057f2119655ab9f920">https://qiita.com/notakaos/items/89057f2119655ab9f920</a></li>
+</ul>
+
+    
+
+
+  
+
+  
+
+
+
+
+
+    
+  
+
+  </article>
+
+
+      </div>
+    </div>
+  </main>
+  
+  <footer class="Footer">
+    <div class="u-wrapper">
+      <div class="u-padding">
+        Except where otherwise noted, content on this site is licensed under a &#32; <a href="http://creativecommons.org/licenses/by/4.0/" rel="license">Creative Commons Attribution 4.0 International License</a>.
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

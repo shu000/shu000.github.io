@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  
+    <meta name="description" content="手順メモ。
+Versions  Docker Desktop：2.1.0.4 VSCode：1.29.2 Node.js：10.17.0  Docker Desktop for Windows をインストール 今回はNode.jsをDockerコンテナ上で利用することとします。 Node.jsをインストールする他の方法としてnvm-windowsという選択肢もありますが、本記事では割愛します。 なお、ローカルへのNode.js直接インストールは、バージョン変更が面倒になるのでおすすめしません。
+前準備（Hyper-Vの有効化） DockerはLinuxのファイルシステムを利用した仮想化システムです。WindowsではHyper-Vを利用して仮想化を実現しています。
+ コントロールパネル &gt; プログラムと機能 &gt; Windows機能の有効化または無効化　を開く Hyper-Vにチェックを入れる ねんのためWindowsを再起動する  Dockerインストール手順  このページから、インストーラをダウンロードする その際、DockerHubへのサインインを求められるのでアカウントを作成しておく インストーラを起動して、何回かYesをクリックしたら完了 スタートメニューからDocker Desktopを起動  ここにクジラが表示されたら起動完了です。
+ドライブ共有設定 WindowsのドライブをDockerコンテナと共有できるようにしておきます。
+ クジラを右クリックしてSettingsを選択 Shared Drives から共有したいドライブをチェックしてApplyする  VSCode をインストール 入力補完やESLint自動適用などのプラグインが便利なエディタです。
+VSCodeインストール手順  このページからインストーラをダウンロードする インストーラを実行する  VSCode日本語化手順 日本語化もしておくと見やすいです。Extensionsを開いて「japanese」などで検索すると日本語拡張が見つかります。
+私の場合「使用法」欄のconfig設定はしなくても日本語化されました。
+日本語表示はこんな感じ。
+VSCodeでDocker上のNode.jsプロジェクトを開く DockerでNode.jsコンテナを起動する  コマンドプロンプトかPowerShellで起動コマンドを叩く  docker container run -it -d --name sample -p 3000:3000 -v C:\Users\username\Development\myproj:/root/myproj -w /root/myproj node:10.">
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0" />
+  <title>Docker＋Node.js＋VSCode環境をWindowsで構築する | miyagon&#39;s blog</title>
+  <link rel="canonical" href="/post/20191110/">
+
+
+  
+
+
+
+
+
+
+
+
+  
+    
+  
+  
+  <link rel="stylesheet" href="/css/base.min.a65b7a198daa2411550a438c82c7d65937be5a4545ed781eecf4b3e44d419fa0.css" integrity="sha256-plt6GY2qJBFVCkOMgsfWWTe&#43;WkVF7Xge7PSz5E1Bn6A=" crossorigin="anonymous">
+
+
+
+</head>
+
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="/">miyagon&#39;s blog</a>
+      </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/about/">About</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/post/">Posts</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/tags/">Tags</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/categories/">Categories</a>
+        </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+  <article>
+    <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="/post/20191110/" rel="bookmark">Docker＋Node.js＋VSCode環境をWindowsで構築する</a>
+  </h2>
+  
+    <time datetime="2019-11-07T13:38:57&#43;09:00">7 November, 2019</time>
+  
+</header>
+    <p>手順メモ。</p>
+<h1 id="versions">Versions</h1>
+<ul>
+<li>Docker Desktop：2.1.0.4</li>
+<li>VSCode：1.29.2</li>
+<li>Node.js：10.17.0</li>
+</ul>
+<h1 id="docker-desktop-for-windows-をインストール">Docker Desktop for Windows をインストール</h1>
+<p>今回はNode.jsをDockerコンテナ上で利用することとします。
+Node.jsをインストールする他の方法として<a href="https://github.com/coreybutler/nvm-windows">nvm-windows</a>という選択肢もありますが、本記事では割愛します。
+なお、ローカルへのNode.js直接インストールは、バージョン変更が面倒になるのでおすすめしません。</p>
+<h2 id="前準備hyper-vの有効化">前準備（Hyper-Vの有効化）</h2>
+<p>DockerはLinuxのファイルシステムを利用した仮想化システムです。WindowsではHyper-Vを利用して仮想化を実現しています。</p>
+<ol>
+<li>コントロールパネル &gt; プログラムと機能 &gt; Windows機能の有効化または無効化　を開く</li>
+<li>Hyper-Vにチェックを入れる</li>
+<li>ねんのためWindowsを再起動する</li>
+</ol>
+<p><img src="/images/20191107_HyperV.png" alt="Hyper-V設定画面"></p>
+<h2 id="dockerインストール手順">Dockerインストール手順</h2>
+<ol>
+<li><a href="https://docs.docker.com/docker-for-windows/install/">このページ</a>から、インストーラをダウンロードする</li>
+<li>その際、DockerHubへのサインインを求められるのでアカウントを作成しておく</li>
+<li>インストーラを起動して、何回かYesをクリックしたら完了</li>
+<li>スタートメニューからDocker Desktopを起動</li>
+</ol>
+<p><img src="/images/20191107_Bar.png" alt="ツールバーにクジラ表示"></p>
+<p>ここにクジラが表示されたら起動完了です。</p>
+<h2 id="ドライブ共有設定">ドライブ共有設定</h2>
+<p>WindowsのドライブをDockerコンテナと共有できるようにしておきます。</p>
+<ol>
+<li>クジラを右クリックしてSettingsを選択</li>
+<li>Shared Drives から共有したいドライブをチェックしてApplyする</li>
+</ol>
+<p><img src="/images/20191107_SharedDrives.png" alt="ドライブ共有設定画面"></p>
+<h1 id="vscode-をインストール">VSCode をインストール</h1>
+<p>入力補完やESLint自動適用などのプラグインが便利なエディタです。</p>
+<h2 id="vscodeインストール手順">VSCodeインストール手順</h2>
+<ol>
+<li><a href="https://code.visualstudio.com/">このページ</a>からインストーラをダウンロードする</li>
+<li>インストーラを実行する</li>
+</ol>
+<h2 id="vscode日本語化手順">VSCode日本語化手順</h2>
+<p>日本語化もしておくと見やすいです。Extensionsを開いて「japanese」などで検索すると日本語拡張が見つかります。</p>
+<p><img src="/images/20191107_VSCodeJapan.png" alt="VSCode日本語拡張"></p>
+<p>私の場合「使用法」欄のconfig設定はしなくても日本語化されました。</p>
+<p>日本語表示はこんな感じ。</p>
+<p><img src="/images/20191107_VSCodeJapanesed.png" alt="日本語化後の画面"></p>
+<h1 id="vscodeでdocker上のnodejsプロジェクトを開く">VSCodeでDocker上のNode.jsプロジェクトを開く</h1>
+<h2 id="dockerでnodejsコンテナを起動する">DockerでNode.jsコンテナを起動する</h2>
+<ol>
+<li>コマンドプロンプトかPowerShellで起動コマンドを叩く</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">docker container run -it -d --name sample -p 3000:3000 -v C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\u</span>sername<span style="color:#ae81ff">\D</span>evelopment<span style="color:#ae81ff">\m</span>yproj:/root/myproj -w /root/myproj node:10.17.0 /bin/bash
+</code></pre></div><p>各コマンド・オプションの意味は以下</p>
+<ul>
+<li><code>docker container run</code>：コンテナ起動コマンド</li>
+<li><code>-it</code>：ホスト（Windows）のターミナル操作をコンテナの標準入出力に紐づける</li>
+<li><code>-d</code>：デタッチモードで起動する（バックグラウンドで起動する）</li>
+<li><code>--name myproj</code>：myprojという名前を付ける</li>
+<li><code>-p 8000:8000</code>：ホスト3000ポートをコンテナ3000ポートに紐づける</li>
+<li><code>-v C:\...\myproj:/root/myproj</code>：ホストの「C:...\myproj」を、コンテナの「/root/myproj」で参照可能にする</li>
+<li><code>-w /root/myproj</code>：作業ディレクトリ（コンテナ起動時の）を「/root/myproj」にする</li>
+<li><code>node:10.17.0</code>：起動するイメージを「node:10.17.0」に指定</li>
+</ul>
+<p>起動中コンテナの確認コマンドは以下です。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">docker container ls
+</code></pre></div><p><img src="/images/20191107_Docker.png" alt="Dockerコンテナ起動確認"></p>
+<h2 id="vscodeで起動したコンテナを開く">VSCodeで起動したコンテナを開く</h2>
+<p>まず日本語拡張と同様の手順で「Remote Development」拡張をインストールします。リモートエクスプローラーペインが追加され、さっき起動したmyprojコンテナが見えるようになります。</p>
+<p><img src="/images/20191107_VSCodeContainer.png" alt="コンテナ一覧"></p>
+<p>次にコンテナにアタッチします。Connect to Container ボタンをクリックするとアタッチできます。
+アタッチ直後にはVSCodeの設定ファイルが開かれれると思います。保存しておけばよいです。
+ただ同一イメージからコンテナを立ち上げると設定が引き継がれるので注意してください。</p>
+<p><img src="/images/20191107_VSCodeConnect.png" alt="コンテナアタッチ操作"></p>
+<p>アタッチ完了したらエクスプローラーでコンテナ上のディレクトリが見れるようになります。</p>
+<p><img src="/images/20191107_VSCodeOpened.png" alt="コンテナアタッチ完了"></p>
+<p>ディレクトリが開いていなかったら「フォルダーを開く」から開けます。</p>
+<p><img src="/images/20191107_VSCodeOpening.png" alt="コンテナ内のディレクトリを開く操作"></p>
+<h2 id="nodejs-動作確認">Node.js 動作確認</h2>
+<p>動作確認のため、HelloWorldしてみます。hello.jsを作成します。</p>
+<p><img src="/images/20191107_VSCodeHello.png" alt="hello.js"></p>
+<p>次に「ターミナル &gt; 新しいターミナル」からターミナルを開きましょう。</p>
+<p><img src="/images/20191107_VSCodeTerminal.png" alt="ターミナルを開く"></p>
+<p>ちゃんとコンテナのターミナルを開いてくれます！VSCodeべんり！
+<code>node hello.js</code>でメッセージが表示されました！</p>
+<p><img src="/images/20191107_VSCodeTest.png" alt="動作確認"></p>
+
+    
+
+
+  
+
+  
+
+
+
+
+
+    
+  
+
+  </article>
+
+
+      </div>
+    </div>
+  </main>
+  
+  <footer class="Footer">
+    <div class="u-wrapper">
+      <div class="u-padding">
+        Except where otherwise noted, content on this site is licensed under a &#32; <a href="http://creativecommons.org/licenses/by/4.0/" rel="license">Creative Commons Attribution 4.0 International License</a>.
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

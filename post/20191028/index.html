@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  
+    <meta name="description" content="バックアップ mongodump --host hostname --port 27017 --username user --password pass -o /dump リストア mongorestore --host hostname --port 27017 --username user --password pass /dump ">
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0" />
+  <title>mongoDB@4.0.12でバックアップとリストア | miyagon&#39;s blog</title>
+  <link rel="canonical" href="/post/20191028/">
+
+
+  
+
+
+
+
+
+
+
+
+  
+    
+  
+  
+  <link rel="stylesheet" href="/css/base.min.a65b7a198daa2411550a438c82c7d65937be5a4545ed781eecf4b3e44d419fa0.css" integrity="sha256-plt6GY2qJBFVCkOMgsfWWTe&#43;WkVF7Xge7PSz5E1Bn6A=" crossorigin="anonymous">
+
+
+
+</head>
+
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="/">miyagon&#39;s blog</a>
+      </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/about/">About</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/post/">Posts</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/tags/">Tags</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/categories/">Categories</a>
+        </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+  <article>
+    <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="/post/20191028/" rel="bookmark">mongoDB@4.0.12でバックアップとリストア</a>
+  </h2>
+  
+    <time datetime="2019-10-28T16:01:41&#43;09:00">28 October, 2019</time>
+  
+</header>
+    <h1 id="バックアップ">バックアップ</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mongodump --host hostname --port <span style="color:#ae81ff">27017</span> --username user --password pass -o /dump
+</code></pre></div><h1 id="リストア">リストア</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mongorestore --host hostname --port <span style="color:#ae81ff">27017</span> --username user --password pass /dump
+</code></pre></div>
+    
+
+
+  
+
+  
+
+
+
+
+
+    
+  
+
+  </article>
+
+
+      </div>
+    </div>
+  </main>
+  
+  <footer class="Footer">
+    <div class="u-wrapper">
+      <div class="u-padding">
+        Except where otherwise noted, content on this site is licensed under a &#32; <a href="http://creativecommons.org/licenses/by/4.0/" rel="license">Creative Commons Attribution 4.0 International License</a>.
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

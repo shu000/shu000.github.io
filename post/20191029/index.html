@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  
+    <meta name="description" content="コマンドインストール sudo yum update -y sudo yum install vim git -y ユーザを追加 sudo useradd miyagon sudo passwd miyagon 新規ユーザでsshできるようにする
+sudo cp -arp /home/ec2-user/.ssh /home/miyagon/ sudo chown -R miyagon /home/miyagon/.ssh 新規ユーザにsudo権限を与える
+ /etc/sudoersで wheel グループに権限あればこっち  sudo usermod -aG wheel miyagon  /etc/sudoers.d/clout-initで個別付与ならこっち  sudo visudo -f /etc/sudoers.d/cloud-init &#43;miyagon ALL = (ALL) ALL -ec2-user ALL = NOPASSWD: ALL -ec2-user ALL=(ALL) NOPASSWD:ALL ec2-usrを削除 新規ユーザでssh可能なことを確認
+ssh -i IDENTITY_FILE miyagon@IP_ADDRESS ログイン成功したらec2-userはいらない
+sudo userdel -r ec2-user Docker インストール インストールして起動">
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0" />
+  <title>EC2にdocker-composeインストール | miyagon&#39;s blog</title>
+  <link rel="canonical" href="/post/20191029/">
+
+
+  
+
+
+
+
+
+
+
+
+  
+    
+  
+  
+  <link rel="stylesheet" href="/css/base.min.a65b7a198daa2411550a438c82c7d65937be5a4545ed781eecf4b3e44d419fa0.css" integrity="sha256-plt6GY2qJBFVCkOMgsfWWTe&#43;WkVF7Xge7PSz5E1Bn6A=" crossorigin="anonymous">
+
+
+
+</head>
+
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="/">miyagon&#39;s blog</a>
+      </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/about/">About</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/post/">Posts</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/tags/">Tags</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/categories/">Categories</a>
+        </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+  <article>
+    <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="/post/20191029/" rel="bookmark">EC2にdocker-composeインストール</a>
+  </h2>
+  
+    <time datetime="2019-10-29T15:57:47&#43;09:00">29 October, 2019</time>
+  
+</header>
+    <h1 id="コマンドインストール">コマンドインストール</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo yum update -y
+sudo yum install vim git -y
+</code></pre></div><h1 id="ユーザを追加">ユーザを追加</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo useradd miyagon
+sudo passwd miyagon
+</code></pre></div><p>新規ユーザでsshできるようにする</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo cp -arp /home/ec2-user/.ssh /home/miyagon/
+sudo chown -R miyagon /home/miyagon/.ssh
+</code></pre></div><p>新規ユーザにsudo権限を与える</p>
+<ul>
+<li><code>/etc/sudoers</code>で wheel グループに権限あればこっち</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo usermod -aG wheel miyagon
+</code></pre></div><ul>
+<li><code>/etc/sudoers.d/clout-init</code>で個別付与ならこっち</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo visudo -f /etc/sudoers.d/cloud-init
+  +miyagon ALL <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ALL<span style="color:#f92672">)</span> ALL
+  -ec2-user ALL <span style="color:#f92672">=</span> NOPASSWD: ALL
+  -ec2-user ALL<span style="color:#f92672">=(</span>ALL<span style="color:#f92672">)</span> NOPASSWD:ALL
+</code></pre></div><h1 id="ec2-usrを削除">ec2-usrを削除</h1>
+<p>新規ユーザでssh可能なことを確認</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -i IDENTITY_FILE miyagon@IP_ADDRESS
+</code></pre></div><p>ログイン成功したらec2-userはいらない</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo userdel -r ec2-user
+</code></pre></div><h1 id="docker-インストール">Docker インストール</h1>
+<p>インストールして起動</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo yum install docker
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo docker --version
+</code></pre></div><p>ユーザをdockerグループに追加
+（sudoなしでdockerコマンド叩けるようにする）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo usermod -aG docker miyagon
+</code></pre></div><h1 id="docker-compose-インストール">docker-compose インストール</h1>
+<p>バージョン番号は最新リリースをここで確認する
+<a href="https://github.com/docker/compose/releases">Releases - docker/compose</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo curl -L https://github.com/docker/compose/releases/download/1.25.0-rc4/docker-compose-<span style="color:#e6db74">`</span>uname -s<span style="color:#e6db74">`</span>-<span style="color:#e6db74">`</span>uname -m<span style="color:#e6db74">`</span> -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+</code></pre></div>
+    
+
+
+  
+
+  
+
+
+
+
+
+    
+  
+
+  </article>
+
+
+      </div>
+    </div>
+  </main>
+  
+  <footer class="Footer">
+    <div class="u-wrapper">
+      <div class="u-padding">
+        Except where otherwise noted, content on this site is licensed under a &#32; <a href="http://creativecommons.org/licenses/by/4.0/" rel="license">Creative Commons Attribution 4.0 International License</a>.
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
