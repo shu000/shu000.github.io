@@ -7,8 +7,102 @@
     <description>Recent content in Posts on miyagon&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Thu, 07 Nov 2019 13:38:57 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 20 Apr 2020 19:52:53 +0900</lastBuildDate>
     <atom:link href="http://shu000.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Next.js &#43; React &#43; TypeScirpt に Jest 導入したメモ</title>
+      <link>http://shu000.github.io/post/20200420/</link>
+      <pubDate>Mon, 20 Apr 2020 19:52:53 +0900</pubDate>
+      <guid>http://shu000.github.io/post/20200420/</guid>
+      <description>&lt;h1 id=&#34;入れたものリスト&#34;&gt;入れたものリスト&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Jest&lt;/li&gt;
+&lt;li&gt;react-testing-library&lt;/li&gt;
+&lt;li&gt;jest-dom&lt;/li&gt;
+&lt;li&gt;react-test-renderer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;jest&#34;&gt;Jest&lt;/h1&gt;
+&lt;p&gt;インストール&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;yarn add -D jest @types/jest babel-jest identity-obj-proxy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;jest.config.js&lt;/code&gt;を書く&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-jest.config.js&#34; data-lang=&#34;jest.config.js&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;exports&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;roots&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;rootDir&amp;gt;/src&amp;#34;&lt;/span&gt;],
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;moduleNameMapper&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// import &amp;#39;*.css&amp;#39; を無視する
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;\\.(css|scss)$&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;identity-obj-proxy&amp;#34;&lt;/span&gt;
+  },
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;transform&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// jest実行時にtsとjsxをバベる
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;^.+\\.(js|jsx|ts|tsx)$&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;babel-jest&amp;#34;&lt;/span&gt;
+  },
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;transformIgnorePatterns&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; [
+    &lt;span style=&#34;color:#75715e&#34;&gt;// node_modules/ 以下はバベらない
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)&amp;#34;&lt;/span&gt;,
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;babel.config.js&lt;/code&gt;がない場合は書く&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/zeit/next.js/issues/8663&#34;&gt;参考&lt;/a&gt; &lt;a href=&#34;https://github.com/zeit/next.js/tree/canary/examples/with-jest&#34;&gt;公式サンプル&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-babel.config.js&#34; data-lang=&#34;babel.config.js&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;exports&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;presets&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;next/babel&amp;#34;&lt;/span&gt;]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;react-testing-library&#34;&gt;react-testing-library&lt;/h1&gt;
+&lt;p&gt;基本的にはインストールするだけ&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;yarn add -D @testing-library/react
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;container-componentをレンダリングしたい場合&#34;&gt;Container Componentをレンダリングしたい場合&lt;/h3&gt;
+&lt;p&gt;react-testing-libraryにはshallowレンダリング機能がないため、子や孫にContainer Componentが含まれていたら詰む。&lt;/p&gt;
+&lt;p&gt;対策として、コンポーネントを&lt;code&gt;&amp;lt;Provider&amp;gt;&lt;/code&gt;でラップしてからレンダリングするラッパーレンダラーを用意し、がっつりレンダリングしてしまう。&lt;/p&gt;
+&lt;p&gt;ラッパーレンダラー&lt;code&gt;testUtils.js&lt;/code&gt;をプロジェクトのルートとかに書く。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-testUtils.js&#34; data-lang=&#34;testUtils.js&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;React&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;react&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;createStore&lt;/span&gt; } &lt;span style=&#34;color:#a6e22e&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;redux&amp;#39;&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;Provider&lt;/span&gt; } &lt;span style=&#34;color:#a6e22e&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;react-redux&amp;#39;&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;render&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rtlRender&lt;/span&gt; } &lt;span style=&#34;color:#a6e22e&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;@testing-library/react&amp;#39;&lt;/span&gt;;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;initialState&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;reducer&lt;/span&gt; } &lt;span style=&#34;color:#a6e22e&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;./reducer&amp;#39;&lt;/span&gt;;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;wrappedRender&lt;/span&gt;(
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;ui&lt;/span&gt;,
+  {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;initialState&lt;/span&gt;,
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;store&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;createStore&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;reducer&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;initialState&lt;/span&gt;),
+    ...&lt;span style=&#34;color:#a6e22e&#34;&gt;renderOptions&lt;/span&gt;
+  } &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {}
+) {
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Wrapper&lt;/span&gt;({ &lt;span style=&#34;color:#a6e22e&#34;&gt;children&lt;/span&gt; }) {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;Provider&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;store&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#a6e22e&#34;&gt;store&lt;/span&gt;}&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;{&lt;span style=&#34;color:#a6e22e&#34;&gt;children&lt;/span&gt;}&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;/Provider&amp;gt;&lt;/span&gt;
+  }
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rtlRender&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;ui&lt;/span&gt;, { &lt;span style=&#34;color:#a6e22e&#34;&gt;wrapper&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Wrapper&lt;/span&gt;, ...&lt;span style=&#34;color:#a6e22e&#34;&gt;renderOptions&lt;/span&gt; })
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;@testing-library/react&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;export&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;wrappedRender&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;render&lt;/span&gt; }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;各テストで必要な際、&lt;code&gt;import { render } from &#39;@testing-library/react&#39;&lt;/code&gt;の代わりに&lt;code&gt;import { render } from &#39;./testUtils&#39;&lt;/code&gt;してあげる。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://testing-library.com/docs/example-react-redux&#34;&gt;参考&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;jest-dom&#34;&gt;jest-dom&lt;/h1&gt;
+&lt;p&gt;インストール&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;yarn add -D @testing-library/jest-dom 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;setupTests.js&lt;/code&gt;を書く&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-setupTests.js&#34; data-lang=&#34;setupTests.js&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;@testing-library/jest-dom/extend-expect&amp;#34;&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;jest.config.js&lt;/code&gt;に&lt;code&gt;setupTests.js&lt;/code&gt;を読み込む設定を追記&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-jest.config.js&#34; data-lang=&#34;jest.config.js&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;exports&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;setupFilesAfterEnv&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;rootDir&amp;gt;/setupTests.js&amp;#34;&lt;/span&gt;]
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;（※面倒でないなら各テストで&lt;code&gt;import &amp;quot;@testing-library/jest-dom/extend-expect&amp;quot;&lt;/code&gt;すればよい）&lt;/p&gt;
+&lt;h3 id=&#34;waitfor使えない問題&#34;&gt;waitFor()使えない問題&lt;/h3&gt;
+&lt;p&gt;react-testing-libraryとjest-domを同時に利用するときの、&lt;a href=&#34;https://github.com/testing-library/dom-testing-library/issues/477&#34;&gt;waitFor()使えない問題&lt;/a&gt;を解消する&lt;/p&gt;
+&lt;p&gt;パッケージインストール&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;yarn add -D jest-environment-jsdom-sixteen
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;jest呼び出し時のコマンドライン引数を追加する必要があるため、&lt;code&gt;package.json&lt;/code&gt;のスクリプトを変更&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-package.json&#34; data-lang=&#34;package.json&#34;&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;scripts&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;:&lt;/span&gt; {
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;jest --env=jest-environment-jsdom-sixteen&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;react-test-renderer&#34;&gt;react-test-renderer&lt;/h1&gt;
+&lt;p&gt;これは本当インストールするだけ&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;yarn add -D react-test-renderer @types/react-test-renderer
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
     <item>
       <title>Docker＋Node.js＋VSCode環境をWindowsで構築する</title>
       <link>http://shu000.github.io/post/20191110/</link>

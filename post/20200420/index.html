@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  
+    <meta name="description" content="入れたものリスト  Jest react-testing-library jest-dom react-test-renderer  Jest インストール
+yarn add -D jest @types/jest babel-jest identity-obj-proxy jest.config.jsを書く
+module.exports = { roots: [&#34;&lt;rootDir&gt;/src&#34;], moduleNameMapper: { // import &#39;*.css&#39; を無視する  &#34;\\.(css|scss)$&#34;: &#34;identity-obj-proxy&#34; }, transform: { // jest実行時にtsとjsxをバベる  &#34;^.&#43;\\.(js|jsx|ts|tsx)$&#34;: &#34;babel-jest&#34; }, transformIgnorePatterns: [ // node_modules/ 以下はバベらない  &#34;[/\\\\]node_modules[/\\\\].&#43;\\.(js|jsx|ts|tsx)&#34;, ] } babel.config.jsがない場合は書く
+参考 公式サンプル
+module.exports = { &#34;presets&#34;: [&#34;next/babel&#34;] } react-testing-library 基本的にはインストールするだけ
+yarn add -D @testing-library/react Container Componentをレンダリングしたい場合 react-testing-libraryにはshallowレンダリング機能がないため、子や孫にContainer Componentが含まれていたら詰む。
+対策として、コンポーネントを&lt;Provider&gt;でラップしてからレンダリングするラッパーレンダラーを用意し、がっつりレンダリングしてしまう。
+ラッパーレンダラーtestUtils.jsをプロジェクトのルートとかに書く。">
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0" />
+  <title>Next.js &#43; React &#43; TypeScirpt に Jest 導入したメモ | miyagon&#39;s blog</title>
+  <link rel="canonical" href="/post/20200420/">
+
+
+  
+
+
+
+
+
+
+
+
+  
+    
+  
+  
+  <link rel="stylesheet" href="/css/base.min.a65b7a198daa2411550a438c82c7d65937be5a4545ed781eecf4b3e44d419fa0.css" integrity="sha256-plt6GY2qJBFVCkOMgsfWWTe&#43;WkVF7Xge7PSz5E1Bn6A=" crossorigin="anonymous">
+
+
+
+</head>
+
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="/">miyagon&#39;s blog</a>
+      </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/about/">About</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/post/">Posts</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/tags/">Tags</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/categories/">Categories</a>
+        </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+  <article>
+    <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="/post/20200420/" rel="bookmark">Next.js &#43; React &#43; TypeScirpt に Jest 導入したメモ</a>
+  </h2>
+  
+    <time datetime="2020-04-20T19:52:53&#43;09:00">20 April, 2020</time>
+  
+</header>
+    <h1 id="入れたものリスト">入れたものリスト</h1>
+<ul>
+<li>Jest</li>
+<li>react-testing-library</li>
+<li>jest-dom</li>
+<li>react-test-renderer</li>
+</ul>
+<h1 id="jest">Jest</h1>
+<p>インストール</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yarn add -D jest @types/jest babel-jest identity-obj-proxy
+</code></pre></div><p><code>jest.config.js</code>を書く</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jest.config.js" data-lang="jest.config.js"><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> {
+  <span style="color:#a6e22e">roots</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#34;&lt;rootDir&gt;/src&#34;</span>],
+  <span style="color:#a6e22e">moduleNameMapper</span><span style="color:#f92672">:</span> {
+    <span style="color:#75715e">// import &#39;*.css&#39; を無視する
+</span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;\\.(css|scss)$&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;identity-obj-proxy&#34;</span>
+  },
+  <span style="color:#a6e22e">transform</span><span style="color:#f92672">:</span> {
+    <span style="color:#75715e">// jest実行時にtsとjsxをバベる
+</span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;^.+\\.(js|jsx|ts|tsx)$&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;babel-jest&#34;</span>
+  },
+  <span style="color:#a6e22e">transformIgnorePatterns</span><span style="color:#f92672">:</span> [
+    <span style="color:#75715e">// node_modules/ 以下はバベらない
+</span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)&#34;</span>,
+  ]
+}
+</code></pre></div><p><code>babel.config.js</code>がない場合は書く</p>
+<p><a href="https://github.com/zeit/next.js/issues/8663">参考</a> <a href="https://github.com/zeit/next.js/tree/canary/examples/with-jest">公式サンプル</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-babel.config.js" data-lang="babel.config.js"><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> {
+  <span style="color:#e6db74">&#34;presets&#34;</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#34;next/babel&#34;</span>]
+}
+</code></pre></div><h1 id="react-testing-library">react-testing-library</h1>
+<p>基本的にはインストールするだけ</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yarn add -D @testing-library/react
+</code></pre></div><h3 id="container-componentをレンダリングしたい場合">Container Componentをレンダリングしたい場合</h3>
+<p>react-testing-libraryにはshallowレンダリング機能がないため、子や孫にContainer Componentが含まれていたら詰む。</p>
+<p>対策として、コンポーネントを<code>&lt;Provider&gt;</code>でラップしてからレンダリングするラッパーレンダラーを用意し、がっつりレンダリングしてしまう。</p>
+<p>ラッパーレンダラー<code>testUtils.js</code>をプロジェクトのルートとかに書く。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-testUtils.js" data-lang="testUtils.js"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">createStore</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;redux&#39;</span>;
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">Provider</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react-redux&#39;</span>;
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">render</span> <span style="color:#a6e22e">as</span> <span style="color:#a6e22e">rtlRender</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@testing-library/react&#39;</span>;
+
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">initialState</span>, <span style="color:#a6e22e">reducer</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;./reducer&#39;</span>;
+
+<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">wrappedRender</span>(
+  <span style="color:#a6e22e">ui</span>,
+  {
+    <span style="color:#a6e22e">initialState</span>,
+    <span style="color:#a6e22e">store</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">createStore</span>(<span style="color:#a6e22e">reducer</span>, <span style="color:#a6e22e">initialState</span>),
+    ...<span style="color:#a6e22e">renderOptions</span>
+  } <span style="color:#f92672">=</span> {}
+) {
+  <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">Wrapper</span>({ <span style="color:#a6e22e">children</span> }) {
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">Provider</span> <span style="color:#a6e22e">store</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">store</span>}<span style="color:#f92672">&gt;</span>{<span style="color:#a6e22e">children</span>}<span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/Provider&gt;</span>
+  }
+  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rtlRender</span>(<span style="color:#a6e22e">ui</span>, { <span style="color:#a6e22e">wrapper</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Wrapper</span>, ...<span style="color:#a6e22e">renderOptions</span> })
+}
+
+<span style="color:#66d9ef">export</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@testing-library/react&#39;</span>
+
+<span style="color:#66d9ef">export</span> { <span style="color:#a6e22e">wrappedRender</span> <span style="color:#a6e22e">as</span> <span style="color:#a6e22e">render</span> }
+</code></pre></div><p>各テストで必要な際、<code>import { render } from '@testing-library/react'</code>の代わりに<code>import { render } from './testUtils'</code>してあげる。</p>
+<p><a href="https://testing-library.com/docs/example-react-redux">参考</a></p>
+<h1 id="jest-dom">jest-dom</h1>
+<p>インストール</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yarn add -D @testing-library/jest-dom 
+</code></pre></div><p><code>setupTests.js</code>を書く</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-setupTests.js" data-lang="setupTests.js"><span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#34;@testing-library/jest-dom/extend-expect&#34;</span>;
+</code></pre></div><p><code>jest.config.js</code>に<code>setupTests.js</code>を読み込む設定を追記</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jest.config.js" data-lang="jest.config.js"><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> {
+
+  <span style="color:#a6e22e">setupFilesAfterEnv</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#34;&lt;rootDir&gt;/setupTests.js&#34;</span>]
+
+}
+</code></pre></div><p>（※面倒でないなら各テストで<code>import &quot;@testing-library/jest-dom/extend-expect&quot;</code>すればよい）</p>
+<h3 id="waitfor使えない問題">waitFor()使えない問題</h3>
+<p>react-testing-libraryとjest-domを同時に利用するときの、<a href="https://github.com/testing-library/dom-testing-library/issues/477">waitFor()使えない問題</a>を解消する</p>
+<p>パッケージインストール</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yarn add -D jest-environment-jsdom-sixteen
+</code></pre></div><p>jest呼び出し時のコマンドライン引数を追加する必要があるため、<code>package.json</code>のスクリプトを変更</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-package.json" data-lang="package.json"><span style="color:#e6db74">&#34;scripts&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+  <span style="color:#f92672">&#34;test&#34;</span>: <span style="color:#e6db74">&#34;jest --env=jest-environment-jsdom-sixteen&#34;</span>
+}
+</code></pre></div><h1 id="react-test-renderer">react-test-renderer</h1>
+<p>これは本当インストールするだけ</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yarn add -D react-test-renderer @types/react-test-renderer
+</code></pre></div>
+    
+
+
+  
+
+  
+
+
+
+
+
+  <footer>
+    
+      
+    
+      
+        <ul class="Tags">
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/jest/" rel="tag">Jest</a>
+            </li>
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/next.js/" rel="tag">Next.js</a>
+            </li>
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/react/" rel="tag">React</a>
+            </li>
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/typescript/" rel="tag">TypeScript</a>
+            </li>
+          
+        </ul>
+      
+    
+  </footer>
+
+    
+  
+
+  </article>
+
+
+      </div>
+    </div>
+  </main>
+  
+  <footer class="Footer">
+    <div class="u-wrapper">
+      <div class="u-padding">
+        Except where otherwise noted, content on this site is licensed under a &#32; <a href="http://creativecommons.org/licenses/by/4.0/" rel="license">Creative Commons Attribution 4.0 International License</a>.
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
