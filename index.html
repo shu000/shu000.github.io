@@ -62,6 +62,21 @@
     
     
     
+    
+    
+  
+    
+    
+    
+      
+      
+    
+    
+    
+  
+    
+    
+    
       
       
     
@@ -131,6 +146,162 @@
 
   
 
+  
+    <article>
+      <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="/post/20200516/" rel="bookmark">React &#43; babel &#43; webpack</a>
+  </h2>
+  
+    <time datetime="2020-05-16T12:01:48&#43;09:00">16 May, 2020</time>
+  
+</header>
+      
+        <p>2019年8月頃のメモを掘り出したので転記。</p>
+<h1 id="init">init</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">git init
+npm init -y
+</code></pre></div><h1 id="npm-install">npm install</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">npm install --save react react-dom
+npm install --save-dev webpack webpack-cli
+npm instlal --save-dev @babel/cli @babel/core @babel/preset-env @babel/preset-react babel-loader
+
+<span style="color:#75715e"># HMRしてくれるやつ</span>
+npm install --save-dev webpack-dev-server
+<span style="color:#75715e"># htmlにbundle.jsを埋め込んでくれるやつ</span>
+npm install --save-dev html-webpack-plugin
+</code></pre></div><h1 id="webpackconfigjs">webpack.config.js</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js:webpack.config.js" data-lang="js:webpack.config.js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">HtmlWebPackPlugin</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;html-webpack-plugin&#34;</span>);
+
+<span style="color:#75715e">// ./src/index.html に ./dist/bundle.js を埋め込んで ./dist/index.html に吐き出す子
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">htmlWebpackPlugin</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">HtmlWebPackPlugin</span>({
+  <span style="color:#a6e22e">template</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;./src/index.html&#34;</span>,
+  <span style="color:#a6e22e">filename</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;./index.html&#34;</span>
+});
+
+<span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> {
+  <span style="color:#a6e22e">entry</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">__dirname</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/src/index.js&#34;</span>,
+  <span style="color:#a6e22e">output</span><span style="color:#f92672">:</span> {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">__dirname</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/dist&#34;</span>,
+    <span style="color:#a6e22e">filename</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;bundle.js&#34;</span>
+  },
+  <span style="color:#a6e22e">module</span><span style="color:#f92672">:</span> {
+    <span style="color:#a6e22e">rules</span><span style="color:#f92672">:</span> [
+      {
+        <span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.js$/</span>,
+        <span style="color:#a6e22e">use</span><span style="color:#f92672">:</span> [
+          {
+            <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;babel-loader&#34;</span>,
+            <span style="color:#a6e22e">options</span><span style="color:#f92672">:</span> {
+              <span style="color:#a6e22e">presets</span><span style="color:#f92672">:</span> [
+                <span style="color:#e6db74">&#34;@babel/preset-env&#34;</span>,
+                <span style="color:#e6db74">&#34;@babel/react&#34;</span>
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  <span style="color:#a6e22e">plugins</span><span style="color:#f92672">:</span> [<span style="color:#a6e22e">htmlWebpackPlugin</span>],
+  <span style="color:#75715e">// webpack-dev-server の設定
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">devServer</span><span style="color:#f92672">:</span> {
+    <span style="color:#a6e22e">inline</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,   <span style="color:#75715e">// localhost:3000/webpack-dev-server/ではなくlocalhost:3000/でアクセスできるようになる。
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">port</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">3000</span>,
+    <span style="color:#a6e22e">host</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;0.0.0.0&#34;</span> <span style="color:#75715e">// ※ dockerのコンテナで立てたサーバが他のホストからアクセスできるように全てのネットワークインターフェースに接続
+</span><span style="color:#75715e"></span>  }
+};
+</code></pre></div>
+      
+      
+
+
+  
+
+  
+
+
+
+
+
+  <footer>
+    
+      
+    
+      
+        <ul class="Tags">
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/babel/" rel="tag">babel</a>
+            </li>
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/react/" rel="tag">React</a>
+            </li>
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/webpack/" rel="tag">webpack</a>
+            </li>
+          
+        </ul>
+      
+    
+  </footer>
+
+    </article>
+    
+      <div class="Divider"></div>
+    
+  
+    <article>
+      <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="/post/20200421/" rel="bookmark">git log の分析考える</a>
+  </h2>
+  
+    <time datetime="2020-04-21T00:50:55&#43;09:00">21 April, 2020</time>
+  
+</header>
+      
+        <p>（追記予定）</p>
+<h1 id="よく更新されるファイルを探したい">よく更新されるファイルを探したい</h1>
+<p>ブランチ<code>v1</code>〜<code>v2</code>間の各ファイルの追加・削除行数の合計を表示し、追加行数降順に並べる</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git log --numstat --no-merges --pretty<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> v1 v2 | grep -v <span style="color:#e6db74">&#34;dist/&#34;</span> | grep -E <span style="color:#e6db74">&#34;.+\.(ts|tsx)&#34;</span> | sort -nr
+</code></pre></div><p><a href="https://maku77.github.io/git/stats/count-changes.html">https://maku77.github.io/git/stats/count-changes.html</a>
+<a href="https://qiita.com/richmikan@github/items/cc4494359b1ac2f72311">https://qiita.com/richmikan@github/items/cc4494359b1ac2f72311</a></p>
+
+      
+      
+
+
+  
+
+  
+
+
+
+
+
+  <footer>
+    
+      
+    
+      
+        <ul class="Tags">
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/git/" rel="tag">Git</a>
+            </li>
+          
+        </ul>
+      
+    
+  </footer>
+
+    </article>
+    
+      <div class="Divider"></div>
+    
   
     <article>
       <header class="Heading">
@@ -250,15 +421,15 @@
         <ul class="Tags">
           
             <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/react/" rel="tag">React</a>
+            </li>
+          
+            <li class="Tags-item u-background">
               <a class="Tags-link u-clickable" href="/tags/jest/" rel="tag">Jest</a>
             </li>
           
             <li class="Tags-item u-background">
               <a class="Tags-link u-clickable" href="/tags/next.js/" rel="tag">Next.js</a>
-            </li>
-          
-            <li class="Tags-item u-background">
-              <a class="Tags-link u-clickable" href="/tags/react/" rel="tag">React</a>
             </li>
           
             <li class="Tags-item u-background">
@@ -550,7 +721,7 @@ docker-compose --version
     <article>
       <header class="Heading">
   <h2 class="Heading-title">
-    <a class="Heading-link u-clickable" href="/post/20191022/" rel="bookmark">MacのTerminalがzshになったのでPreztoでプロンプトテーマ設定した</a>
+    <a class="Heading-link u-clickable" href="/post/20191022/" rel="bookmark">zshにPreztoでプロンプトテーマ設定した話</a>
   </h2>
   
     <time datetime="2019-10-22T16:02:52&#43;09:00">22 October, 2019</time>
@@ -620,7 +791,7 @@ contains something similar to the following:
         <ul class="Tags">
           
             <li class="Tags-item u-background">
-              <a class="Tags-link u-clickable" href="/tags/mac/" rel="tag">Mac</a>
+              <a class="Tags-link u-clickable" href="/tags/prezto/" rel="tag">Prezto</a>
             </li>
           
         </ul>

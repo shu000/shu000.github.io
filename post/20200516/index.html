@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  
+    <meta name="description" content="2019年8月頃のメモを掘り出したので転記。
+init git init npm init -y npm install npm install --save react react-dom npm install --save-dev webpack webpack-cli npm instlal --save-dev @babel/cli @babel/core @babel/preset-env @babel/preset-react babel-loader # HMRしてくれるやつ npm install --save-dev webpack-dev-server # htmlにbundle.jsを埋め込んでくれるやつ npm install --save-dev html-webpack-plugin webpack.config.js const HtmlWebPackPlugin = require(&#34;html-webpack-plugin&#34;); // ./src/index.html に ./dist/bundle.js を埋め込んで ./dist/index.html に吐き出す子 const htmlWebpackPlugin = new HtmlWebPackPlugin({ template: &#34;./src/index.html&#34;, filename: &#34;./index.html&#34; }); module.exports = { entry: __dirname &#43; &#34;/src/index.js&#34;, output: { path: __dirname &#43; &#34;/dist&#34;, filename: &#34;bundle.">
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0" />
+  <title>React &#43; babel &#43; webpack | miyagon&#39;s blog</title>
+  <link rel="canonical" href="/post/20200516/">
+
+
+  
+
+
+
+
+
+
+
+
+  
+    
+  
+  
+  <link rel="stylesheet" href="/css/base.min.a65b7a198daa2411550a438c82c7d65937be5a4545ed781eecf4b3e44d419fa0.css" integrity="sha256-plt6GY2qJBFVCkOMgsfWWTe&#43;WkVF7Xge7PSz5E1Bn6A=" crossorigin="anonymous">
+
+
+
+</head>
+
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="/">miyagon&#39;s blog</a>
+      </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/about/">About</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/post/">Posts</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/tags/">Tags</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/categories/">Categories</a>
+        </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+  <article>
+    <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="/post/20200516/" rel="bookmark">React &#43; babel &#43; webpack</a>
+  </h2>
+  
+    <time datetime="2020-05-16T12:01:48&#43;09:00">16 May, 2020</time>
+  
+</header>
+    <p>2019年8月頃のメモを掘り出したので転記。</p>
+<h1 id="init">init</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">git init
+npm init -y
+</code></pre></div><h1 id="npm-install">npm install</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">npm install --save react react-dom
+npm install --save-dev webpack webpack-cli
+npm instlal --save-dev @babel/cli @babel/core @babel/preset-env @babel/preset-react babel-loader
+
+<span style="color:#75715e"># HMRしてくれるやつ</span>
+npm install --save-dev webpack-dev-server
+<span style="color:#75715e"># htmlにbundle.jsを埋め込んでくれるやつ</span>
+npm install --save-dev html-webpack-plugin
+</code></pre></div><h1 id="webpackconfigjs">webpack.config.js</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js:webpack.config.js" data-lang="js:webpack.config.js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">HtmlWebPackPlugin</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;html-webpack-plugin&#34;</span>);
+
+<span style="color:#75715e">// ./src/index.html に ./dist/bundle.js を埋め込んで ./dist/index.html に吐き出す子
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">htmlWebpackPlugin</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">HtmlWebPackPlugin</span>({
+  <span style="color:#a6e22e">template</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;./src/index.html&#34;</span>,
+  <span style="color:#a6e22e">filename</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;./index.html&#34;</span>
+});
+
+<span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> {
+  <span style="color:#a6e22e">entry</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">__dirname</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/src/index.js&#34;</span>,
+  <span style="color:#a6e22e">output</span><span style="color:#f92672">:</span> {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">__dirname</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/dist&#34;</span>,
+    <span style="color:#a6e22e">filename</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;bundle.js&#34;</span>
+  },
+  <span style="color:#a6e22e">module</span><span style="color:#f92672">:</span> {
+    <span style="color:#a6e22e">rules</span><span style="color:#f92672">:</span> [
+      {
+        <span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.js$/</span>,
+        <span style="color:#a6e22e">use</span><span style="color:#f92672">:</span> [
+          {
+            <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;babel-loader&#34;</span>,
+            <span style="color:#a6e22e">options</span><span style="color:#f92672">:</span> {
+              <span style="color:#a6e22e">presets</span><span style="color:#f92672">:</span> [
+                <span style="color:#e6db74">&#34;@babel/preset-env&#34;</span>,
+                <span style="color:#e6db74">&#34;@babel/react&#34;</span>
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  <span style="color:#a6e22e">plugins</span><span style="color:#f92672">:</span> [<span style="color:#a6e22e">htmlWebpackPlugin</span>],
+  <span style="color:#75715e">// webpack-dev-server の設定
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">devServer</span><span style="color:#f92672">:</span> {
+    <span style="color:#a6e22e">inline</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,   <span style="color:#75715e">// localhost:3000/webpack-dev-server/ではなくlocalhost:3000/でアクセスできるようになる。
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">port</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">3000</span>,
+    <span style="color:#a6e22e">host</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;0.0.0.0&#34;</span> <span style="color:#75715e">// ※ dockerのコンテナで立てたサーバが他のホストからアクセスできるように全てのネットワークインターフェースに接続
+</span><span style="color:#75715e"></span>  }
+};
+</code></pre></div>
+    
+
+
+  
+
+  
+
+
+
+
+
+  <footer>
+    
+      
+    
+      
+        <ul class="Tags">
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/babel/" rel="tag">babel</a>
+            </li>
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/react/" rel="tag">React</a>
+            </li>
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/webpack/" rel="tag">webpack</a>
+            </li>
+          
+        </ul>
+      
+    
+  </footer>
+
+    
+  
+
+  </article>
+
+
+      </div>
+    </div>
+  </main>
+  
+  <footer class="Footer">
+    <div class="u-wrapper">
+      <div class="u-padding">
+        Except where otherwise noted, content on this site is licensed under a &#32; <a href="http://creativecommons.org/licenses/by/4.0/" rel="license">Creative Commons Attribution 4.0 International License</a>.
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

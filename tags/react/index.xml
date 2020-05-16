@@ -7,8 +7,82 @@
     <description>Recent content in React on miyagon&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 20 Apr 2020 19:52:53 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 16 May 2020 12:01:48 +0900</lastBuildDate>
     <atom:link href="http://shu000.github.io/tags/react/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>React &#43; babel &#43; webpack</title>
+      <link>http://shu000.github.io/post/20200516/</link>
+      <pubDate>Sat, 16 May 2020 12:01:48 +0900</pubDate>
+      <guid>http://shu000.github.io/post/20200516/</guid>
+      <description>&lt;p&gt;2019年8月頃のメモを掘り出したので転記。&lt;/p&gt;
+&lt;h1 id=&#34;init&#34;&gt;init&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;git init
+npm init -y
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;npm-install&#34;&gt;npm install&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;npm install --save react react-dom
+npm install --save-dev webpack webpack-cli
+npm instlal --save-dev @babel/cli @babel/core @babel/preset-env @babel/preset-react babel-loader
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# HMRしてくれるやつ&lt;/span&gt;
+npm install --save-dev webpack-dev-server
+&lt;span style=&#34;color:#75715e&#34;&gt;# htmlにbundle.jsを埋め込んでくれるやつ&lt;/span&gt;
+npm install --save-dev html-webpack-plugin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;webpackconfigjs&#34;&gt;webpack.config.js&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js:webpack.config.js&#34; data-lang=&#34;js:webpack.config.js&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;HtmlWebPackPlugin&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;html-webpack-plugin&amp;#34;&lt;/span&gt;);
+
+&lt;span style=&#34;color:#75715e&#34;&gt;// ./src/index.html に ./dist/bundle.js を埋め込んで ./dist/index.html に吐き出す子
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;htmlWebpackPlugin&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;HtmlWebPackPlugin&lt;/span&gt;({
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;template&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;./src/index.html&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;filename&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;./index.html&amp;#34;&lt;/span&gt;
+});
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;exports&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;entry&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;__dirname&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/src/index.js&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;output&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;path&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;__dirname&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/dist&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;filename&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;bundle.js&amp;#34;&lt;/span&gt;
+  },
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;module&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;rules&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; [
+      {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;test&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/\.js$/&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; [
+          {
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;loader&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;babel-loader&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;options&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; {
+              &lt;span style=&#34;color:#a6e22e&#34;&gt;presets&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; [
+                &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;@babel/preset-env&amp;#34;&lt;/span&gt;,
+                &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;@babel/react&amp;#34;&lt;/span&gt;
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;plugins&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;htmlWebpackPlugin&lt;/span&gt;],
+  &lt;span style=&#34;color:#75715e&#34;&gt;// webpack-dev-server の設定
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;devServer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;inline&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;,   &lt;span style=&#34;color:#75715e&#34;&gt;// localhost:3000/webpack-dev-server/ではなくlocalhost:3000/でアクセスできるようになる。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;port&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3000&lt;/span&gt;,
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;host&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;0.0.0.0&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;// ※ dockerのコンテナで立てたサーバが他のホストからアクセスできるように全てのネットワークインターフェースに接続
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  }
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    <item>
+      <title>git log の分析考える</title>
+      <link>http://shu000.github.io/post/20200421/</link>
+      <pubDate>Tue, 21 Apr 2020 00:50:55 +0900</pubDate>
+      <guid>http://shu000.github.io/post/20200421/</guid>
+      <description>&lt;p&gt;（追記予定）&lt;/p&gt;
+&lt;h1 id=&#34;よく更新されるファイルを探したい&#34;&gt;よく更新されるファイルを探したい&lt;/h1&gt;
+&lt;p&gt;ブランチ&lt;code&gt;v1&lt;/code&gt;〜&lt;code&gt;v2&lt;/code&gt;間の各ファイルの追加・削除行数の合計を表示し、追加行数降順に並べる&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git log --numstat --no-merges --pretty&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt; v1 v2 | grep -v &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dist/&amp;#34;&lt;/span&gt; | grep -E &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;.+\.(ts|tsx)&amp;#34;&lt;/span&gt; | sort -nr
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://maku77.github.io/git/stats/count-changes.html&#34;&gt;https://maku77.github.io/git/stats/count-changes.html&lt;/a&gt;
+&lt;a href=&#34;https://qiita.com/richmikan@github/items/cc4494359b1ac2f72311&#34;&gt;https://qiita.com/richmikan@github/items/cc4494359b1ac2f72311&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>Next.js &#43; React &#43; TypeScirpt に Jest 導入したメモ</title>
       <link>http://shu000.github.io/post/20200420/</link>
@@ -257,7 +331,7 @@ docker-compose --version
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     <item>
-      <title>MacのTerminalがzshになったのでPreztoでプロンプトテーマ設定した</title>
+      <title>zshにPreztoでプロンプトテーマ設定した話</title>
       <link>http://shu000.github.io/post/20191022/</link>
       <pubDate>Tue, 22 Oct 2019 16:02:52 +0900</pubDate>
       <guid>http://shu000.github.io/post/20191022/</guid>
