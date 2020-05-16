@@ -379,5 +379,171 @@ contains something similar to the following:
 &lt;/ul&gt;
 </description>
     </item>
+    <item>
+      <title>mocha試してみたメモ</title>
+      <link>http://shu000.github.io/post/20190715/</link>
+      <pubDate>Mon, 15 Jul 2019 12:18:30 +0900</pubDate>
+      <guid>http://shu000.github.io/post/20190715/</guid>
+      <description>&lt;h2 id=&#34;install&#34;&gt;Install&lt;/h2&gt;
+&lt;p&gt;mocha と babel を入れるよ&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;mocha : 単体テストライブラリ&lt;/li&gt;
+&lt;li&gt;babel-cli : jsトランスパイラのクライアント(babel-core が依存関係で付いてくるよ！)&lt;/li&gt;
+&lt;li&gt;babel-preset-es2015 : ES2051 -&amp;gt; javascript プリセット&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm install --save-dev mocha
+npm install --save-dev babel babel-preset-es2015
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;mocha&#34;&gt;Mocha&lt;/h2&gt;
+&lt;p&gt;テストを書いてみる&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;assert&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;assert&amp;#39;&lt;/span&gt;);
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;describe&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Array&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt;() {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;describe&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;#indexOf()&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt;() {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;should return -1 when the value is not present&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt;() {
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;assert&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;equal&lt;/span&gt;([&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;].&lt;span style=&#34;color:#a6e22e&#34;&gt;indexOf&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;), &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;);
+    });
+  });
+});
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;テストを実行してみる&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;export PATH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$PATH:./node_modules/.bin
+mocha ./test-sample.js
+
+
+  Array
+    &lt;span style=&#34;color:#75715e&#34;&gt;#indexOf()&lt;/span&gt;
+      ✓ should &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; -1 when the value is not present
+
+
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; passing &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;42ms&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;動いたぞ！&lt;/p&gt;
+&lt;h2 id=&#34;mocha-with-babel&#34;&gt;Mocha with BABEL&lt;/h2&gt;
+&lt;h3 id=&#34;exportimport-まわりがよくわかっていない&#34;&gt;export/import まわりがよくわかっていない&lt;/h3&gt;
+&lt;p&gt;ES6で書くともう全然テストできない！&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;default&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Words&lt;/span&gt; {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;constructor&lt;/span&gt;() {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [];
+  }
+
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;append&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;occurence&lt;/span&gt;) {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;found&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;findIndex&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;obj&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;obj&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;===&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;);
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;found&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;) {
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;push&lt;/span&gt;({
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;wordID&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;length&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;occurence&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;occurence&lt;/span&gt;
+      });
+    } &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; {
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;[&lt;span style=&#34;color:#a6e22e&#34;&gt;found&lt;/span&gt;].&lt;span style=&#34;color:#a6e22e&#34;&gt;occurence&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;occurence&lt;/span&gt;;
+    }
+  }
+
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;() {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;;
+  }
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;assert&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;assert&amp;#39;&lt;/span&gt;);
+&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Words&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;../public/js/Words&amp;#34;&lt;/span&gt;);
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;describe&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Words&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt;() {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;describe&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;#get()&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt;() {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;should return [] when empty&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt;() {
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Words&lt;/span&gt;();
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;assert&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;deepStrictEqual&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;(), []);
+    });
+  });
+
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;describe&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;#append()&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt;() {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;should append args when not exists same word&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt;() {
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Words&lt;/span&gt;();
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;append&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;StarPlutinum&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;999&lt;/span&gt;);
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;assert&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;deepStrictEqual&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;(), [{
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;wordID&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;StarPlutinum&amp;#34;&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;occurence&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;999&lt;/span&gt;
+      }]);
+    });
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;should add args.occurence to words.occurende when exists same word&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt;() {
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Words&lt;/span&gt;();
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;append&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The World&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;500&lt;/span&gt;);
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;append&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The World&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;500&lt;/span&gt;);
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;assert&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;deepStrictEqual&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;words&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;(), [{
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;wordID&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The World&amp;#34;&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;occurence&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+      }]);
+    });
+  });
+
+});
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;テスト結果&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mocha ./test/test-words.js ./Words.js:1
+
+export default class Words &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+^^^^^^
+
+SyntaxError: Unexpected token export
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;export を理解してくれない。。。&lt;/p&gt;
+&lt;h3 id=&#34;なのでbabelでトランスパイルしよう&#34;&gt;なのでBABELでトランスパイルしよう！&lt;/h3&gt;
+&lt;h4 id=&#34;babelrc書いておく&#34;&gt;babelrc書いておく&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json:.babelrc&#34; data-lang=&#34;json:.babelrc&#34;&gt;{
+  &amp;quot;presets&amp;quot;: [&amp;quot;es2015&amp;quot;]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;babelを噛ませてからテストしてみるけどうまくいかないじゃん&#34;&gt;babelを噛ませてからテストしてみるけどうまくいかないじゃん！&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mocha --require babel-core/register ./test/test-words.js 
+
+
+  Words
+    &lt;span style=&#34;color:#75715e&#34;&gt;#get()&lt;/span&gt;
+      1&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; should &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[]&lt;/span&gt; when empty
+    &lt;span style=&#34;color:#75715e&#34;&gt;#append()&lt;/span&gt;
+      2&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; should append args when not exists same word
+      3&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; should add args.occurence to words.occurende when exists same word
+
+
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; passing &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;52ms&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; failing
+
+  1&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; Words
+       &lt;span style=&#34;color:#75715e&#34;&gt;#get()&lt;/span&gt;
+         should &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[]&lt;/span&gt; when empty:
+     TypeError: Words is not a constructor
+      at Context.&amp;lt;anonymous&amp;gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;test/test-words.js:10:21&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+
+...
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;Words is not a constructor&lt;/em&gt; だとぉ。。。？&lt;/p&gt;
+&lt;h3 id=&#34;require-書き換えたらうまくいった&#34;&gt;require() 書き換えたらうまくいった&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;export default class Words&lt;/code&gt; を
+&lt;code&gt;{ default: Words[Function()] }&lt;/code&gt; で認識してるっぽい。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript:test-words.js&#34; data-lang=&#34;javascript:test-words.js&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;assert&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;assert&amp;#39;&lt;/span&gt;);
+&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Words&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;../public/js/Words&amp;#34;&lt;/span&gt;).&lt;span style=&#34;color:#a6e22e&#34;&gt;deault&lt;/span&gt;;
+
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mocha --require babel-core/register ./test/test-words.js 
+
+
+  Words
+    &lt;span style=&#34;color:#75715e&#34;&gt;#get()&lt;/span&gt;
+      ✓ should &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[]&lt;/span&gt; when empty
+    &lt;span style=&#34;color:#75715e&#34;&gt;#append()&lt;/span&gt;
+      ✓ should append args when not exists same word
+      ✓ should add args.occurence to words.occurende when exists same word
+
+
+  &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; passing &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;37ms&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;やり方合ってんのかはわからんが動いた！
+やった〜&lt;/p&gt;
+&lt;p&gt;以上。&lt;/p&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/mochajs/mocha/wiki/compilers-deprecation&#34;&gt;compilers deprecation | GitHub mochajs/mocha Wiki&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://nodejs.org/api/assert.html#assert_assert_deepstrictequal_actual_expected_message&#34;&gt;Assert | Node.js v12.6.0 Documentation&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
   </channel>
 </rss>

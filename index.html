@@ -62,12 +62,6 @@
     
     
     
-    
-    
-  
-    
-    
-    
       
       
     
@@ -97,6 +91,21 @@
     
       
       
+    
+    
+    
+  
+    
+    
+    
+      
+      
+    
+    
+    
+  
+    
+    
     
     
     
@@ -792,6 +801,209 @@ contains something similar to the following:
           
             <li class="Tags-item u-background">
               <a class="Tags-link u-clickable" href="/tags/prezto/" rel="tag">Prezto</a>
+            </li>
+          
+        </ul>
+      
+    
+  </footer>
+
+    </article>
+    
+      <div class="Divider"></div>
+    
+  
+    <article>
+      <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="/post/20190715/" rel="bookmark">mocha試してみたメモ</a>
+  </h2>
+  
+    <time datetime="2019-07-15T12:18:30&#43;09:00">15 July, 2019</time>
+  
+</header>
+      
+        <h2 id="install">Install</h2>
+<p>mocha と babel を入れるよ</p>
+<ul>
+<li>mocha : 単体テストライブラリ</li>
+<li>babel-cli : jsトランスパイラのクライアント(babel-core が依存関係で付いてくるよ！)</li>
+<li>babel-preset-es2015 : ES2051 -&gt; javascript プリセット</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm install --save-dev mocha
+npm install --save-dev babel babel-preset-es2015
+</code></pre></div><h2 id="mocha">Mocha</h2>
+<p>テストを書いてみる</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">assert</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;assert&#39;</span>);
+
+<span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;Array&#39;</span>, <span style="color:#66d9ef">function</span>() {
+  <span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;#indexOf()&#39;</span>, <span style="color:#66d9ef">function</span>() {
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should return -1 when the value is not present&#39;</span>, <span style="color:#66d9ef">function</span>() {
+      <span style="color:#a6e22e">assert</span>.<span style="color:#a6e22e">equal</span>([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>].<span style="color:#a6e22e">indexOf</span>(<span style="color:#ae81ff">2</span>), <span style="color:#ae81ff">1</span>);
+    });
+  });
+});
+</code></pre></div><p>テストを実行してみる</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">export PATH<span style="color:#f92672">=</span>$PATH:./node_modules/.bin
+mocha ./test-sample.js
+
+
+  Array
+    <span style="color:#75715e">#indexOf()</span>
+      ✓ should <span style="color:#66d9ef">return</span> -1 when the value is not present
+
+
+  <span style="color:#ae81ff">1</span> passing <span style="color:#f92672">(</span>42ms<span style="color:#f92672">)</span>
+
+</code></pre></div><p>動いたぞ！</p>
+<h2 id="mocha-with-babel">Mocha with BABEL</h2>
+<h3 id="exportimport-まわりがよくわかっていない">export/import まわりがよくわかっていない</h3>
+<p>ES6で書くともう全然テストできない！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Words</span> {
+  <span style="color:#a6e22e">constructor</span>() {
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">words</span> <span style="color:#f92672">=</span> [];
+  }
+
+ <span style="color:#a6e22e">append</span>(<span style="color:#a6e22e">text</span>, <span style="color:#a6e22e">occurence</span>) {
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">found</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">words</span>.<span style="color:#a6e22e">findIndex</span>(<span style="color:#a6e22e">obj</span> =&gt; <span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">text</span> <span style="color:#f92672">===</span> <span style="color:#a6e22e">text</span>);
+    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">found</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+      <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">words</span>.<span style="color:#a6e22e">push</span>({
+        <span style="color:#a6e22e">wordID</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">words</span>.<span style="color:#a6e22e">length</span>,
+        <span style="color:#a6e22e">text</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">text</span>,
+        <span style="color:#a6e22e">occurence</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">occurence</span>
+      });
+    } <span style="color:#66d9ef">else</span> {
+      <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">words</span>[<span style="color:#a6e22e">found</span>].<span style="color:#a6e22e">occurence</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">occurence</span>;
+    }
+  }
+
+ <span style="color:#a6e22e">get</span>() {
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">words</span>;
+  }
+}
+
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">assert</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;assert&#39;</span>);
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">Words</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;../public/js/Words&#34;</span>);
+
+<span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;Words&#39;</span>, <span style="color:#66d9ef">function</span>() {
+  <span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;#get()&#39;</span>, <span style="color:#66d9ef">function</span>() {
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should return [] when empty&#39;</span>, <span style="color:#66d9ef">function</span>() {
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">words</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Words</span>();
+      <span style="color:#a6e22e">assert</span>.<span style="color:#a6e22e">deepStrictEqual</span>(<span style="color:#a6e22e">words</span>.<span style="color:#a6e22e">get</span>(), []);
+    });
+  });
+
+  <span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;#append()&#39;</span>, <span style="color:#66d9ef">function</span>() {
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should append args when not exists same word&#39;</span>, <span style="color:#66d9ef">function</span>() {
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">words</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Words</span>();
+      <span style="color:#a6e22e">words</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#34;StarPlutinum&#34;</span>, <span style="color:#ae81ff">999</span>);
+      <span style="color:#a6e22e">assert</span>.<span style="color:#a6e22e">deepStrictEqual</span>(<span style="color:#a6e22e">words</span>.<span style="color:#a6e22e">get</span>(), [{
+        <span style="color:#a6e22e">wordID</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>,
+        <span style="color:#a6e22e">text</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;StarPlutinum&#34;</span>,
+        <span style="color:#a6e22e">occurence</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">999</span>
+      }]);
+    });
+
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should add args.occurence to words.occurende when exists same word&#39;</span>, <span style="color:#66d9ef">function</span>() {
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">words</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Words</span>();
+      <span style="color:#a6e22e">words</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#34;The World&#34;</span>, <span style="color:#ae81ff">500</span>);
+      <span style="color:#a6e22e">words</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#34;The World&#34;</span>, <span style="color:#ae81ff">500</span>);
+      <span style="color:#a6e22e">assert</span>.<span style="color:#a6e22e">deepStrictEqual</span>(<span style="color:#a6e22e">words</span>.<span style="color:#a6e22e">get</span>(), [{
+        <span style="color:#a6e22e">wordID</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>,
+        <span style="color:#a6e22e">text</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;The World&#34;</span>,
+        <span style="color:#a6e22e">occurence</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1000</span>
+      }]);
+    });
+  });
+
+});
+</code></pre></div><p>テスト結果</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mocha ./test/test-words.js ./Words.js:1
+
+export default class Words <span style="color:#f92672">{</span>
+^^^^^^
+
+SyntaxError: Unexpected token export
+
+</code></pre></div><p>export を理解してくれない。。。</p>
+<h3 id="なのでbabelでトランスパイルしよう">なのでBABELでトランスパイルしよう！</h3>
+<h4 id="babelrc書いておく">babelrc書いておく</h4>
+<pre><code class="language-json:.babelrc" data-lang="json:.babelrc">{
+  &quot;presets&quot;: [&quot;es2015&quot;]
+}
+</code></pre><h4 id="babelを噛ませてからテストしてみるけどうまくいかないじゃん">babelを噛ませてからテストしてみるけどうまくいかないじゃん！</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mocha --require babel-core/register ./test/test-words.js 
+
+
+  Words
+    <span style="color:#75715e">#get()</span>
+      1<span style="color:#f92672">)</span> should <span style="color:#66d9ef">return</span> <span style="color:#f92672">[]</span> when empty
+    <span style="color:#75715e">#append()</span>
+      2<span style="color:#f92672">)</span> should append args when not exists same word
+      3<span style="color:#f92672">)</span> should add args.occurence to words.occurende when exists same word
+
+
+  <span style="color:#ae81ff">0</span> passing <span style="color:#f92672">(</span>52ms<span style="color:#f92672">)</span>
+  <span style="color:#ae81ff">3</span> failing
+
+  1<span style="color:#f92672">)</span> Words
+       <span style="color:#75715e">#get()</span>
+         should <span style="color:#66d9ef">return</span> <span style="color:#f92672">[]</span> when empty:
+     TypeError: Words is not a constructor
+      at Context.&lt;anonymous&gt; <span style="color:#f92672">(</span>test/test-words.js:10:21<span style="color:#f92672">)</span>
+
+...
+
+
+</code></pre></div><p><em>Words is not a constructor</em> だとぉ。。。？</p>
+<h3 id="require-書き換えたらうまくいった">require() 書き換えたらうまくいった</h3>
+<p><code>export default class Words</code> を
+<code>{ default: Words[Function()] }</code> で認識してるっぽい。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript:test-words.js" data-lang="javascript:test-words.js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">assert</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;assert&#39;</span>);
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">Words</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;../public/js/Words&#34;</span>).<span style="color:#a6e22e">deault</span>;
+
+...
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mocha --require babel-core/register ./test/test-words.js 
+
+
+  Words
+    <span style="color:#75715e">#get()</span>
+      ✓ should <span style="color:#66d9ef">return</span> <span style="color:#f92672">[]</span> when empty
+    <span style="color:#75715e">#append()</span>
+      ✓ should append args when not exists same word
+      ✓ should add args.occurence to words.occurende when exists same word
+
+
+  <span style="color:#ae81ff">3</span> passing <span style="color:#f92672">(</span>37ms<span style="color:#f92672">)</span>
+
+</code></pre></div><p>やり方合ってんのかはわからんが動いた！
+やった〜</p>
+<p>以上。</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://github.com/mochajs/mocha/wiki/compilers-deprecation">compilers deprecation | GitHub mochajs/mocha Wiki</a></p>
+<p><a href="https://nodejs.org/api/assert.html#assert_assert_deepstrictequal_actual_expected_message">Assert | Node.js v12.6.0 Documentation</a></p>
+
+      
+      
+
+
+  
+
+  
+
+
+
+
+
+  <footer>
+    
+      
+    
+      
+        <ul class="Tags">
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/mocha/" rel="tag">mocha</a>
             </li>
           
         </ul>
